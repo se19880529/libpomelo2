@@ -47,8 +47,6 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH) \
                     $(LOCAL_PATH)/src \
 					$(LOCAL_PATH)/src/unix
 
-LOCAL_LDLIBS := -lm \
-				-ldl
 
 include $(BUILD_STATIC_LIBRARY)
 

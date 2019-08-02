@@ -38,7 +38,7 @@
 
 #include <semaphore.h>
 #include <pthread.h>
-#ifdef __ANDROID__
+#ifdef ANDROID
 #include "pthread-fixes.h"
 #endif
 #include <signal.h>

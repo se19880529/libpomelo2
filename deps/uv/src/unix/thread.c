@@ -330,12 +330,21 @@ int uv_cond_init(uv_cond_t* cond) {
   if (err)
     return -err;
 
-#if !(defined(__ANDROID__) && defined(HAVE_PTHREAD_COND_TIMEDWAIT_MONOTONIC))
+#if defined(ANDROID)
+  #warning HAVE ANDROID
+  #elif defined(_ANDROID_)
+  #warning HAVE _ANDROID_
+  #endif
+/*
+#if !(defined(ANDROID) && defined(HAVE_PTHREAD_COND_TIMEDWAIT_MONOTONIC))
+  #warning FUCK YOU!
   err = pthread_condattr_setclock(&attr, CLOCK_MONOTONIC);
   if (err)
     goto error2;
+  #else 
+  #warning FUCK YOU!Not my fault!
 #endif
-
+*/
   err = pthread_cond_init(cond, &attr);
   if (err)
     goto error2;
@@ -388,7 +397,7 @@ int uv_cond_timedwait(uv_cond_t* cond, uv_mutex_t* mutex, uint64_t timeout) {
   timeout += uv__hrtime(UV_CLOCK_PRECISE);
   ts.tv_sec = timeout / NANOSEC;
   ts.tv_nsec = timeout % NANOSEC;
-#if defined(__ANDROID__) && defined(HAVE_PTHREAD_COND_TIMEDWAIT_MONOTONIC)
+#if defined(ANDROID) && defined(HAVE_PTHREAD_COND_TIMEDWAIT_MONOTONIC)
   /*
    * The bionic pthread implementation doesn't support CLOCK_MONOTONIC,
    * but has this alternative function instead.
@@ -396,7 +405,7 @@ int uv_cond_timedwait(uv_cond_t* cond, uv_mutex_t* mutex, uint64_t timeout) {
   r = pthread_cond_timedwait_monotonic_np(cond, mutex, &ts);
 #else
   r = pthread_cond_timedwait(cond, mutex, &ts);
-#endif /* __ANDROID__ */
+#endif /* ANDROID */
 #endif
 
 

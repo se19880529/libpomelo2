@@ -45,7 +45,7 @@
 #endif
 
 #ifdef HAVE_IFADDRS_H
-# if defined(__ANDROID__)
+# if defined(ANDROID)
 #  include "android-ifaddrs.h"
 # else
 #  include <ifaddrs.h>

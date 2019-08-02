@@ -171,7 +171,6 @@ extern "C" {
 #  define BN_DIV2W
 # endif
 #endif
-
 /* assuming long is 64bit - this is the DEC Alpha
  * unsigned long long is only 64 bits :-(, don't define
  * BN_LLONG for the DEC Alpha */
