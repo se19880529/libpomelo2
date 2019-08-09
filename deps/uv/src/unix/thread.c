@@ -30,6 +30,7 @@
 
 #undef NANOSEC
 #define NANOSEC ((uint64_t) 1e9)
+#define HAVE_PTHREAD_COND_TIMEDWAIT_MONOTONIC       //FORCE ANDROID NOT TO USE MONOTONIC CLOCK, because ndk miniversion 15 cann't compile
 
 
 struct thread_ctx {
@@ -330,21 +331,12 @@ int uv_cond_init(uv_cond_t* cond) {
   if (err)
     return -err;
 
-#if defined(ANDROID)
-  #warning HAVE ANDROID
-  #elif defined(_ANDROID_)
-  #warning HAVE _ANDROID_
-  #endif
-/*
 #if !(defined(ANDROID) && defined(HAVE_PTHREAD_COND_TIMEDWAIT_MONOTONIC))
-  #warning FUCK YOU!
   err = pthread_condattr_setclock(&attr, CLOCK_MONOTONIC);
   if (err)
     goto error2;
-  #else 
-  #warning FUCK YOU!Not my fault!
 #endif
-*/
+
   err = pthread_cond_init(cond, &attr);
   if (err)
     goto error2;
