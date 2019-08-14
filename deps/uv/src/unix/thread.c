@@ -30,7 +30,10 @@
 
 #undef NANOSEC
 #define NANOSEC ((uint64_t) 1e9)
-#define HAVE_PTHREAD_COND_TIMEDWAIT_MONOTONIC       //FORCE ANDROID NOT TO USE MONOTONIC CLOCK, because ndk miniversion 15 cann't compile
+
+#if defined(ANDROID) && !defined(__LP64__)  //exclude 64 bit build, because 64 bit library was't added until platform-21, so all 64bit thing will built at least minSdkVersion=21, and under 21, we have pthread_condattr_setclock available
+#define HAVE_PTHREAD_COND_TIMEDWAIT_MONOTONIC       //FORCE ANDROID NOT TO USE MONOTONIC CLOCK, because ndk miniversion 15 have no pthread_condattr_setclock function
+#endif
 
 
 struct thread_ctx {
